@@ -1,0 +1,24 @@
+# fly.toml app configuration file generated for fly-katia-ollama on 2024-07-23T12:26:32+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'my–ollama'
+primary_region = 'ams'
+
+[build]
+  image = 'ollama/ollama:latest'
+
+[[mounts]]
+  source = 'ollama'
+  destination = '/root/.ollama'
+  initial_size = '100gb'
+
+[http_service]
+  internal_port = 11434
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = 'a100-80gb'
