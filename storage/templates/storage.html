@@ -1,0 +1,31 @@
+<!-- upload_file.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<header>
+    <nav class="level is-mobile">
+        <div class="level-item has-text-centered">
+            <a href="/storage/fridge" class="subtitle" style="padding:1rem 1rem;">To Fridge or Not to Fridge</a>
+        </div>
+    </nav>
+    <div class="level is-mobile is-centered">
+        <div class="level-item has-text-centered">
+            <form hx-post="{% url 'storage:fridge' %}" hx-target="#results" hx-swap="afterbegin" class="question-form">
+                <div class="field has-addons">
+                    <input class="input" type="text" id="item" placeholder="" name="item"/>
+                    <p class="control">
+                        <button class="button is-link" id="submitButton" type="submit">Submit</button>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</header>
+
+<div class="container is-mobile is-12" style="padding: 50px 50px">
+    <section id="results">
+        {% csrf_token %}
+    </section>
+</div>
+
+{% endblock %}
