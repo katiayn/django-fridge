@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header>
+    <div class="level is-mobile is-centered">
+        <div class="level-item has-text-centered">
+            <form enctype="multipart/form-data" hx-post="{% url 'storage:fridge_image' %}" hx-target="#results" hx-swap="afterbegin" class="question-form">
+                <div class="file has-name is-fullwidth">
+                  <label class="file-label">
+                    <input class="file-input" type="file" id="image" name="image" />
+                    <span class="file-cta">
+                      <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                      </span>
+                      <span class="file-label"> Choose a file… </span>
+                    </span>
+                    <span class="file-name"> No file selected </span>
+                  </label>
+                  <button class="button is-link" id="submitButton" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</header>
+
+<div class="container is-mobile is-12" style="padding: 50px 50px">
+    <section id="results">
+        {% csrf_token %}
+    </section>
+</div>
+
+<script>
+    document.querySelector('.file-input').addEventListener('change', function(event) {
+        const fileName = event.target.files[0].name;
+        document.querySelector('.file-name').textContent = fileName;
+    });
+</script>
+{% endblock %}
