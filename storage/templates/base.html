@@ -14,5 +14,25 @@
     <script type="text/javascript" src="{% static 'js/htmx.min.js' %}" defer></script>
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <!-- headers -->
+    <div class="block">
+        <nav class="navbar is-transparent">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="https://fly.io/">
+                    <img width="50" height="50" src="{% static 'img/flyio-logo.svg'%}">
+                </a>
+            </div>
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    <a href="{% url 'storage:fridge_text' %}" class="navbar-item">By Text</a>
+                    </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered">
+                <a href="{% url 'storage:fridge_text' %}" class="subtitle" style="padding:1rem 1rem;">To Fridge or Not to Fridge</a>
+            </div>
+        </nav>
+    </div>
   {% block content %}{% endblock %}
 </body>

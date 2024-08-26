@@ -4,5 +4,5 @@ from . import views
 app_name = "storage"
 
 urlpatterns = [
-    path("fridge/", views.fridge, name="fridge"),
+    path("fridge/text/", views.fridge_by_text, name="fridge_text"),
 ]

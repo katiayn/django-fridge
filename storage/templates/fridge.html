@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header>
+    <div class="level is-mobile is-centered">
+        <div class="level-item has-text-centered">
+            <form id= "inputForm" hx-post="{% url 'storage:fridge_text' %}" hx-target="#results" hx-swap="afterbegin" class="question-form">
+                <div class="field has-addons">
+                    <input class="input" type="text" id="input_text" placeholder="" name="input_text"/>
+                    <p class="control">
+                        <button class="button is-link" id="submitButton" type="submit">Submit</button>
+                    </p>
+                </div>
+                <p id="warningMessage" class="help is-danger" style="display: none;">Input text can't be empty. Please provide an item.</p>
+            </form>
+        </div>
+    </div>
+</header>
+
+<script>
+    document.getElementById('inputForm').addEventListener('submit', function(event) {
+        var inputText = document.getElementById('input_text').value;
+        var warningMessage = document.getElementById('warningMessage');
+
+        if (!inputText) {
+            warningMessage.style.display = 'block';
+            event.preventDefault();
+        } else {
+            warningMessage.style.display = 'none';
+        }
+    });
+</script>
+
+<div class="container is-mobile is-12" style="padding: 50px 50px">
+    <section id="results">
+        {% csrf_token %}
+    </section>
+</div>
+
+{% endblock %}
