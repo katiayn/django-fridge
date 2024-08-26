@@ -2,7 +2,7 @@ import base64
 import re
 
 from django.conf import settings
-from django.http import HttpResponseNotFound
+from django.http import StreamingHttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from ollama import Client
 
@@ -68,3 +68,28 @@ def fridge_by_image(request):
             return render(request, "partials/response.html", context=context)
 
     return render(request, "fridge_by_image.html", context)
+
+
+def fridge_stream(request):
+    return render(request, "fridge_stream.html")
+
+
+def stream_response(request):
+    def event_stream():
+        if request.GET.get("item"):
+            description = request.GET.get("item")
+            prompt = (
+                f"Should {description} be stored in the fridge? Provide a concise answer followed by a brief "
+                f"explanation."
+            )
+            output = client.generate(
+                model="llama3.1",
+                prompt=prompt,
+                stream=True,
+            )
+            for chunk in output:
+                yield chunk["response"]
+
+    response = StreamingHttpResponse(event_stream(), content_type="text/event-stream")
+    response["Cache-Control"] = "no-cache"
+    return response
