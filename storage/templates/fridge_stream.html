@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header>
+    <div class="level is-mobile is-centered">
+        <div class="level-item has-text-centered">
+            <div class="field has-addons">
+                <input class="input" type="text" id="item" name="item" onkeydown="handleKeyDown(event)"/>
+                <p class="control">
+                    <button class="button is-link" id="submitButton" onclick="sendMessage()">Submit</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container is-mobile is-12" style="padding: 50px 50px">
+    <section id="results">
+        {% csrf_token %}
+    </section>
+</div>
+
+<script>
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('item');
+        const message = input.value;
+        const url = `/storage/fridge/stream/response/?item=${encodeURIComponent(message)}`;
+        input.value = '';
+
+        fetch(url, {
+            headers: { 'Accept': 'text/event-stream' },
+        }).then(response => {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let accumulatedText = '';
+
+            const resultsSection = document.getElementById('results');
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <header class="card-header">
+                    <p class="card-header-title">${message}</p>
+                </header>
+                <div class="card-content">
+                    <div class="content" id="card-content-${Date.now()}">
+                    </div>
+                </div>
+            `;
+            resultsSection.insertBefore(card, resultsSection.firstChild);
+
+            const cardContentDiv = card.querySelector('.card-content .content');
+
+            reader.read().then(function processText({ done, value }) {
+                if (done) {
+                    return;
+                }
+                const text = decoder.decode(value);
+                accumulatedText += text;
+                cardContentDiv.innerHTML += text;
+                resultsSection.scrollTop = resultsSection.scrollHeight;
+
+                return reader.read().then(processText);
+            });
+        });
+    }
+</script>
+{% endblock %}
