@@ -16,7 +16,7 @@ def fridge_by_text(request):
             output = client.generate(
                 model="llama3.1",
                 prompt=f"Should {description} be stored in the fridge? Provide a concise answer followed by a brief "
-                f"explanation.",
+                f"explanation. Give me a response in plain text.",
                 stream=False,
             )
             context = {
@@ -80,7 +80,7 @@ def stream_response(request):
             description = request.GET.get("item")
             prompt = (
                 f"Should {description} be stored in the fridge? Provide a concise answer followed by a brief "
-                f"explanation."
+                f"explanation. Give me a response in plain text."
             )
             output = client.generate(
                 model="llama3.1",

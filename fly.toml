@@ -1,3 +1,8 @@
+# fly.toml app configuration file generated for django-fridge on 2024-08-26T21:37:23+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
 app = 'django-fridge'
 primary_region = 'ams'
 console_command = '/code/manage.py shell'
